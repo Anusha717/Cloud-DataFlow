@@ -1,0 +1,219 @@
+#Task : Load File from GCS bucket to BigQuery
+
+-> Load few columns from csv file in GCS bucket to Big Query Table using Data Flow Job / Template
+
+1. UDF -> js file
+2. Big Query Schema-> JSON file
+Big Query output table - Big Query dataset, table automatically created at run time
+
+Product.csv 
+Person	Product	Amount	Boxes	Choco
+Parasuramudu Jamakayala	Mint Chip Choco	₹23,200	196	Yes
+Yedukondalu Panditula	85% Dark Bars	₹2,989	125	No
+Devsena Veluvalapalli	Peanut Butter Cubes	₹3,185	228	No
+Gopal Venkata	Peanut Butter Cubes	₹1,659	119	No
+Parasuramudu Jamakayala	Peanut Butter Cubes	₹1,554	111	No
+Yedukondalu Panditula	Smooth Sliky Salty	₹3,780	152	No
+Vasavi Veeravasarapu	99% Dark & Pure	₹4,368	257	No
+Mayur Kousika	After Nines	₹15,036	557	No
+Parasuramudu Jamakayala	50% Dark Bites	₹9,618	481	No
+Dinanath Simhambhatla	99% Dark & Pure	₹2,051	137	No
+Nazeer Basha Mustafa	Smooth Sliky Salty	₹3,178	133	No
+Venkat Kodi	Orange Choco	₹3,955	495	Yes
+Raghuveer Yettugunna	Eclairs	₹6,167	363	No
+Sahaj Jonnalagadda	Drinking Coco	₹8,449	353	No
+Gowri Sankar Chakrala	Peanut Butter Cubes	₹6,741	482	No
+Suman Katte	Organic Choco Syrup	₹5,446	681	Yes
+Yedukondalu Panditula	Organic Choco Syrup	₹56	7	Yes
+Prasanna Lakshmi Payasam	Smooth Sliky Salty	₹1,715	72	No
+Suman Katte	Milk Bars	₹2,800	312	No
+Jaipal Potanapudi	85% Dark Bars	₹3,080	119	No
+Dinanath Simhambhatla	Eclairs	₹7,819	489	No
+Mayur Kousika	Spicy Special Slims	₹7,392	1,056	No
+Gowri Sankar Chakrala	After Nines	₹3,955	147	No
+Duran Appala	Drinking Coco	₹10,101	460	No
+Lalitchandra Vadali	Eclairs	₹1,239	78	No
+Sahaj Jonnalagadda	Fruit & Nut Bars	₹9,842	428	No
+Prasanna Lakshmi Payasam	Spicy Special Slims	₹2,499	500	No
+Duran Appala	Eclairs	₹154	10	No
+John Joseph	White Choc	₹3,542	154	No
+John Joseph	Manuka Honey Choco	₹4,648	274	Yes
+Yedukondalu Panditula	85% Dark Bars	₹9,597	370	No
+Nazeer Basha Mustafa	99% Dark & Pure	₹1,547	104	No
+Oorjit Nandanavanam	Manuka Honey Choco	₹6,468	432	Yes
+Sahaj Jonnalagadda	Almond Choco	₹5,565	293	Yes
+Ponnan Delhi	After Nines	₹2,597	100	No
+Prasanna Lakshmi Payasam	Manuka Honey Choco	₹70	5	Yes
+Ponnan Delhi	50% Dark Bites	₹7,938	378	No
+Subbarao Malladi	After Nines	₹13,090	504	No
+Sravanthi Chalaki	85% Dark Bars	₹1,946	78	No
+Sahaj Jonnalagadda	Manuka Honey Choco	₹6,419	402	Yes
+Subbarao Malladi	After Nines	₹3,402	131	No
+Sahaj Jonnalagadda	Raspberry Choco	₹6,664	257	Yes
+Raghuveer Yettugunna	Choco Coated Almonds	₹7,798	312	Yes
+Ponnan Delhi	Spicy Special Slims	₹10,808	1,544	No
+Sreenivasa Naik Gudiwada	Almond Choco	₹3,381	188	Yes
+Lalitchandra Vadali	Peanut Butter Cubes	₹6,538	467	No
+Yedukondalu Panditula	50% Dark Bites	₹5,481	261	No
+Jaipal Potanapudi	Milk Bars	₹11,823	1,478	No
+Prasanna Lakshmi Payasam	Eclairs	₹448	25	No
+Jaipal Potanapudi	Fruit & Nut Bars	₹15,729	684	No
+Jaipal Potanapudi	Almond Choco	₹5,502	290	Yes
+Dinanath Simhambhatla	Fruit & Nut Bars	₹5,082	242	No
+Ramalingam Kothapeta	Drinking Coco	₹490	21	No
+Suman Katte	Raspberry Choco	₹15,379	592	Yes
+Gowri Sankar Chakrala	85% Dark Bars	₹4,858	187	No
+Parasuramudu Jamakayala	Drinking Coco	₹6,181	258	No
+Devrat Damarsingh	Spicy Special Slims	₹553	93	No
+Dinanath Simhambhatla	99% Dark & Pure	₹3,423	214	No
+Venkat Kodi	Fruit & Nut Bars	₹2,310	105	No
+Ponnan Delhi	50% Dark Bites	₹6,223	328	No
+Ponnan Delhi	Drinking Coco	₹5,383	245	No
+Gowri Sankar Chakrala	Organic Choco Syrup	₹595	75	Yes
+Subbarao Malladi	Baker's Choco Chips	₹4,830	230	Yes
+Sahaj Jonnalagadda	Almond Choco	₹1,981	105	Yes
+Vasavi Veeravasarapu	99% Dark & Pure	₹10,640	626	No
+Yedukondalu Panditula	Organic Choco Syrup	₹15,855	2,265	Yes
+Sravanthi Chalaki	50% Dark Bites	₹7,805	411	No
+Vasavi Veeravasarapu	Organic Choco Syrup	₹119	15	Yes
+Gopal Venkata	Peanut Butter Cubes	₹8,498	709	No
+Devsena Veluvalapalli	Choco Coated Almonds	₹1,029	40	Yes
+Devsena Veluvalapalli	Almond Choco	₹1,176	66	Yes
+Parasuramudu Jamakayala	White Choc	₹2,352	107	No
+Ponnan Delhi	Peanut Butter Cubes	₹6,041	432	No
+Yedukondalu Panditula	Organic Choco Syrup	₹5,180	740	Yes
+Prasanna Lakshmi Payasam	Milk Bars	₹3,080	343	No
+Sravanthi Chalaki	Spicy Special Slims	₹8,456	1,692	No
+Gowri Sankar Chakrala	Orange Choco	₹17,633	1,960	Yes
+Yedukondalu Panditula	99% Dark & Pure	₹5,775	385	No
+Sravanthi Chalaki	White Choc	₹1,834	80	No
+Ponnan Delhi	Raspberry Choco	₹3,570	149	Yes
+Ramalingam Kothapeta	Fruit & Nut Bars	₹2,240	107	No
+Dinanath Simhambhatla	Mint Chip Choco	₹4,333	189	Yes
+Prasanna Lakshmi Payasam	After Nines	₹434	17	No
+Prasanna Lakshmi Payasam	Organic Choco Syrup	₹3,241	463	Yes
+John Joseph	70% Dark Bites	₹3,234	191	No
+Sahaj Jonnalagadda	Orange Choco	₹1,162	130	Yes
+Sreenivasa Naik Gudiwada	Spicy Special Slims	₹3,535	505	No
+John Joseph	85% Dark Bars	₹5,971	230	No
+Ponnan Delhi	Caramel Stuffed Bars	₹7	1	No
+John Joseph	Eclairs	₹13,538	797	No
+Sreenivasa Naik Gudiwada	Raspberry Choco	₹707	30	Yes
+Yedukondalu Panditula	After Nines	₹3,241	125	No
+Oorjit Nandanavanam	Organic Choco Syrup	₹7,980	887	Yes
+Sahaj Jonnalagadda	50% Dark Bites	₹6,223	297	No
+Prasanna Lakshmi Payasam	Orange Choco	₹9,072	1,008	Yes
+Suman Katte	Eclairs	₹147	9	No
+Subbarao Malladi	Fruit & Nut Bars	₹1,470	64	No
+Gowri Sankar Chakrala	50% Dark Bites	₹2,128	102	No
+Duran Appala	After Nines	₹889	35	No
+John Joseph	Raspberry Choco	₹3,906	157	Yes
+Ponnan Delhi	Fruit & Nut Bars	₹8,568	373	No
+Subbarao Malladi	Eclairs	₹7,406	463	No
+Gowri Sankar Chakrala	99% Dark & Pure	₹3,920	231	No
+Dinanath Simhambhatla	Spicy Special Slims	₹6,174	1,235	No
+Sahaj Jonnalagadda	70% Dark Bites	₹1,883	126	No
+Duran Appala	Spicy Special Slims	₹4,774	682	No
+Gowri Sankar Chakrala	Almond Choco	₹10,087	594	Yes
+Subbarao Malladi	Orange Choco	₹1,694	212	Yes
+Gopal Venkata	Spicy Special Slims	₹3,920	654	No
+Devrat Damarsingh	Spicy Special Slims	₹6,391	1,066	No
+Subbarao Malladi	Smooth Sliky Salty	₹4,620	178	No
+Sreenivasa Naik Gudiwada	Fruit & Nut Bars	₹2,485	119	No
+Sreenivasa Naik Gudiwada	70% Dark Bites	₹336	23	No
+Oorjit Nandanavanam	Drinking Coco	₹4,767	217	No
+Mayur Kousika	Fruit & Nut Bars	₹17,486	795	No
+Devsena Veluvalapalli	Baker's Choco Chips	₹7,084	308	Yes
+Subbarao Malladi	Caramel Stuffed Bars	₹9,562	736	No
+Nazeer Basha Mustafa	Drinking Coco	₹11,998	500	No
+Subbarao Malladi	Manuka Honey Choco	₹14,014	825	Yes
+Parasuramudu Jamakayala	Spicy Special Slims	₹13,860	1,980	No
+Subbarao Malladi	Eclairs	₹6,111	360	No
+Jaipal Potanapudi	Spicy Special Slims	₹770	129	No
+Vasavi Veeravasarapu	Raspberry Choco	₹175	7	Yes
+Subbarao Malladi	Eclairs	₹7,175	399	No
+Gopal Venkata	Almond Choco	₹721	41	Yes
+Ramalingam Kothapeta	Almond Choco	₹5,600	295	Yes
+Gowri Sankar Chakrala	After Nines	₹7,140	275	No
+Duran Appala	Orange Choco	₹3,472	386	Yes
+Gowri Sankar Chakrala	Milk Bars	₹1,659	208	No
+Subbarao Malladi	99% Dark & Pure	₹6,902	461	No
+Lalitchandra Vadali	Manuka Honey Choco	₹14,497	967	Yes
+Suman Katte	White Choc	₹3,654	159	No
+Yedukondalu Panditula	Milk Bars	₹12,943	1,295	No
+Vasavi Veeravasarapu	99% Dark & Pure	₹5,600	330	No
+Yedukondalu Panditula	Organic Choco Syrup	₹4,907	701	Yes
+Prasanna Lakshmi Payasam	Smooth Sliky Salty	₹4,956	191	No
+Gopal Venkata	Eclairs	₹11,949	747	No
+Devrat Damarsingh	Smooth Sliky Salty	₹17,822	743	No
+Oorjit Nandanavanam	After Nines	₹16,261	603	No
+Devsena Veluvalapalli	Fruit & Nut Bars	₹2,002	96	No
+Venkat Kodi	Raspberry Choco	₹4,963	207	Yes
+Oorjit Nandanavanam	85% Dark Bars	₹7,861	303	No
+Devsena Veluvalapalli	Manuka Honey Choco	₹3,472	205	Yes
+Devrat Damarsingh	Eclairs	₹9,534	530	No
+Nazeer Basha Mustafa	Choco Coated Almonds	₹9,212	384	Yes
+Dinanath Simhambhatla	Smooth Sliky Salty	₹7,441	287	No
+Dinanath Simhambhatla	Baker's Choco Chips	₹10,409	496	Yes
+John Joseph	99% Dark & Pure	₹3,731	234	No
+Subbarao Malladi	Almond Choco	₹14,189	789	Yes
+Sravanthi Chalaki	70% Dark Bites	₹3,598	212	No
+Vasavi Veeravasarapu	Smooth Sliky Salty	₹1,519	64	No
+Lalitchandra Vadali	Organic Choco Syrup	₹5,355	670	Yes
+Gowri Sankar Chakrala	Caramel Stuffed Bars	₹5,992	428	No
+Sahaj Jonnalagadda	Eclairs	₹15,526	863	No
+Yedukondalu Panditula	Baker's Choco Chips	₹2,296	110	Yes
+Devsena Veluvalapalli	After Nines	₹6,076	244	No
+Jaipal Potanapudi	Orange Choco	₹9,443	1,181	Yes
+Parasuramudu Jamakayala	Smooth Sliky Salty	₹5,124	205	No
+Sahaj Jonnalagadda	Smooth Sliky Salty	₹8,638	346	No
+Ponnan Delhi	85% Dark Bars	₹3,346	129	No
+Parasuramudu Jamakayala	Milk Bars	₹735	82	No
+Nazeer Basha Mustafa	Caramel Stuffed Bars	₹10,255	684	No
+Raghuveer Yettugunna	Milk Bars	₹4,746	475	No
+Venkat Kodi	Fruit & Nut Bars	₹1,617	74	No
+Gowri Sankar Chakrala	Caramel Stuffed Bars	₹7,819	559	No
+Raghuveer Yettugunna	Manuka Honey Choco	₹3,801	254	Yes
+Prasanna Lakshmi Payasam	Peanut Butter Cubes	₹5,565	429	No
+Prasanna Lakshmi Payasam	Milk Bars	₹5,383	599	No
+Devrat Damarsingh	White Choc	₹3,969	189	No
+Yedukondalu Panditula	99% Dark & Pure	₹4,095	241	No
+Subbarao Malladi	After Nines	₹16,093	644	No
+Dinanath Simhambhatla	White Choc	₹399	19	No
+Yedukondalu Panditula	Almond Choco	₹5,222	291	Yes
+Parasuramudu Jamakayala	50% Dark Bites	₹8,988	474	No
+Sahaj Jonnalagadda	Baker's Choco Chips	₹3,157	151	Yes
+Parasuramudu Jamakayala	Orange Choco	₹11,823	1,478	Yes
+Gowri Sankar Chakrala	Peanut Butter Cubes	₹679	49	No
+Vasavi Veeravasarapu	Choco Coated Almonds	₹10,052	387	Yes
+Devsena Veluvalapalli	Spicy Special Slims	₹3,276	468	No
+Venkat Kodi	White Choc	₹8,484	386	No
+Lalitchandra Vadali	Peanut Butter Cubes	₹1,085	91	No
+Ramalingam Kothapeta	Manuka Honey Choco	₹4,746	280	Yes
+John Joseph	50% Dark Bites	₹2,072	104	No
+Devsena Veluvalapalli	Raspberry Choco	₹16,513	661	Yes
+Sravanthi Chalaki	White Choc	₹5,880	268	No
+Sahaj Jonnalagadda	Drinking Coco	₹3,885	177	No
+Ramalingam Kothapeta	99% Dark & Pure	₹7,651	479	No
+Duran Appala	Caramel Stuffed Bars	₹2,898	207	No
+Venkat Kodi	50% Dark Bites	₹378	20	No
+Jaipal Potanapudi	Organic Choco Syrup	₹6,328	704	Yes
+Duran Appala	Choco Coated Almonds	₹2,681	104	Yes
+Oorjit Nandanavanam	After Nines	₹2,835	114	No
+John Joseph	Almond Choco	₹2,072	122	Yes
+Venkat Kodi	Peanut Butter Cubes	₹1,001	84	No
+Lalitchandra Vadali	70% Dark Bites	₹5,803	363	No
+Venkat Kodi	Raspberry Choco	₹3,045	118	Yes
+John Joseph	White Choc	₹13,951	635	No
+Venkat Kodi	Baker's Choco Chips	₹5,201	227	Yes
+Yedukondalu Panditula	Smooth Sliky Salty	₹15,981	666	No
+Suman Katte	White Choc	₹5,082	231	No
+Sravanthi Chalaki	Mint Chip Choco	₹10,633	444	Yes
+Devrat Damarsingh	Orange Choco	₹1,407	157	Yes
+Gopal Venkata	White Choc	₹266	13	No
+Raghuveer Yettugunna	85% Dark Bars	₹7,406	285	No
+
+
+
+
+
