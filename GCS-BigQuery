@@ -2,8 +2,8 @@
 
 -> Load few columns from csv file in GCS bucket to Big Query Table using Data Flow Job / Template
 Things to get ready to do this task 
-=>keep js , json file,csv file in GCS
-=>create dataset in bigquery
+=>keep js , json file,csv file in GCS bucket
+=>create job,dataset,table in bigquery
 => create dataflow using template
 1. UDF -> js file
 function filter_col_transform(line){
